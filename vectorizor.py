@@ -5,6 +5,7 @@ import openai
 import pinecone
 import os
 from dotenv import load_dotenv
+from langchain.embeddings.openai import OpenAIEmbeddings
 
 # Set up OpenAI and Pinecone API keys
 # Load environment variables from .env file
@@ -14,6 +15,8 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
 INDEX_NAME = os.getenv("INDEX_NAME")
 PINECONE_ENVIRONMENT = os.getenv("PINECONE_ENVIRONMENT")
+PINECONE_HOST = os.getenv("PINECONE_HOST")
+
 # Set up OpenAI and Pinecone API keys
 # Load train.jsonl file
 def load_data(file_path):
@@ -30,7 +33,7 @@ def init_openai(api_key):
 
 # Initialize Pinecone index
 def init_pinecone(api_key, index_name, dimension):
-    pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_ENVIRONMENT)
+    pinecone.init(api_key=PINECONE_API_KEY, environment=PINECONE_ENVIRONMENT, host="us-west1-gcp.pinecone.io")
     if index_name not in pinecone.list_indexes():
         pinecone.create_index(index_name, dimension=dimension)
     return pinecone.Index(index_name)
